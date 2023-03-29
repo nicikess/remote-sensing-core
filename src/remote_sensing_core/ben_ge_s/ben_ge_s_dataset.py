@@ -36,12 +36,8 @@ class BenGeS(Dataset):
         self.transform = transform
         self.normalization_value = normalization_value
 
-        self.data_index = pd.read_csv(
-            data_index_path
-        )
-        self.esaworldcover_index = pd.read_csv(
-            esaworldcover_index_path
-        )
+        self.data_index = pd.read_csv(data_index_path)
+        self.esaworldcover_index = pd.read_csv(esaworldcover_index_path)
         # TODO implement dataset split
 
     def __len__(self):
