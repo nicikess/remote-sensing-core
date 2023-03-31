@@ -32,7 +32,7 @@ class BenGeS(Dataset):
         self.root_dir_s1 = root_dir_s1
         self.root_dir_s2 = root_dir_s2
         self.number_of_classes = number_of_classes
-        self.bands = bands
+        self.bands = Bands(bands)
         self.transform = transform
         self.normalization_value = normalization_value
 
