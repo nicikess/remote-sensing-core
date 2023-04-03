@@ -13,7 +13,9 @@ class CompositeImageTransform(nn.Module):
             padding_parameters: Optional[Dict] = None,
     ):
         super().__init__()
-        transforms_list = []
+        transforms_list = [
+            transforms.ToTensor()
+        ]
         if padding_parameters:
             transforms_list.append(Pad(
                 **padding_parameters
