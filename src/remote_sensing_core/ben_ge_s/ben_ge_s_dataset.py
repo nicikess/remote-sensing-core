@@ -1,9 +1,11 @@
 import os
-from typing import Dict, Optional
+from pathlib import Path
+from typing import Union, Dict, Optional
 
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+from torch import nn
 
 # PyTorch
 from torch.utils.data import Dataset
@@ -21,56 +23,62 @@ from remote_sensing_core.constants import (
 class BenGeS(Dataset):
     def __init__(
         self,
-        esa_world_cover_data,
-        sentinel_1_2_metadata,
-        era5_data,
-        root_dir_s1,
-        root_dir_s2,
-        root_dir_world_cover,
-        number_of_classes,
-        wandb,
-        bands,
-        transform,
-        normalization_value,
+        root_dir_s1: Union[str, Path],
+        root_dir_s2: Union[str, Path],
+        root_dir_world_cover: Union[str, Path],
+        era5_data_path: Union[str, Path],
+        esa_world_cover_index_path: Union[str, Path],
+        sentinel_1_2_metadata_path: Union[str, Path],
+        s2_bands: Union[str, Bands],
+        transform: nn.Module,
+        normalization_value: float = 10000.0,
     ):
-        self.data_index = esa_world_cover_data
-        self.sentinel_1_2_metadata = sentinel_1_2_metadata
-        self.era5_data = era5_data
         self.root_dir_s1 = root_dir_s1
         self.root_dir_s2 = root_dir_s2
         self.root_dir_world_cover = root_dir_world_cover
-        self.number_of_classes = number_of_classes
-        self.wandb = wandb
-        self.bands = bands
+        # Read in csv for climate data
+        self.era5_data = pd.read_csv(era5_data_path)
+        # TODO add altitude model root path
+
+        # Read in csv files for indexing
+        self.esa_world_cover_index = pd.read_csv(esa_world_cover_index_path)
+        self.sentinel_1_2_metadata = pd.read_csv(sentinel_1_2_metadata_path)
+
+        self.number_of_classes = ...  # TODO derive from random worldcover data point
+        self.bands = s2_bands
         self.transform = transform
         self.normalization_value = normalization_value
-        # TODO implement dataset split
 
     def __len__(self):
-        return len(self.data_index)
+        return len(self.esa_world_cover_index)
 
     def __getitem__(self, idx):
 
         # Sentinel 2
-        file_name_s2 = self.data_index.loc[:, "patch_id"][idx]
+        file_name_s2 = self.esa_world_cover_index.loc[:, "patch_id"][idx]
         path_image_s2 = os.path.join(self.root_dir_s2, file_name_s2) + "_all_bands.npy"
         img_s2 = np.load(path_image_s2)
 
         # Load other modalities
 
         # Sentinel 1
-        file_name_s1 = self.sentinel_1_2_metadata.loc[self.sentinel_1_2_metadata['patch_id'] == file_name_s2, "patch_id_s1"].values[0]
+        file_name_s1 = self.sentinel_1_2_metadata.loc[
+            self.sentinel_1_2_metadata["patch_id"] == file_name_s2, "patch_id_s1"
+        ].values[0]
         path_image_s1 = os.path.join(self.root_dir_s1, file_name_s1) + "_all_bands.npy"
         img_s1 = np.load(path_image_s1)
 
         # World cover
-        file_name_world_cover = self.data_index.loc[:, "patch_id"][idx]
-        path_image_world_cover = (os.path.join(self.root_dir_world_cover, file_name_world_cover) + "_esaworldcover.npy")
+        file_name_world_cover = self.esa_world_cover_index.loc[:, "patch_id"][idx]
+        path_image_world_cover = (
+            os.path.join(self.root_dir_world_cover, file_name_world_cover)
+            + "_esaworldcover.npy"
+        )
         img_world_cover = np.load(path_image_world_cover)
 
         # Encode label
         threshold = 0.3
-        label_vector = self.data_index.loc[[idx]]
+        label_vector = self.esa_world_cover_index.loc[[idx]]
         label_vector = label_vector.drop(["filename", "patch_id"], axis=1)
         # Set values to smaller than the threshold to 0
         label_vector = np.where(label_vector <= threshold, 0, label_vector)
