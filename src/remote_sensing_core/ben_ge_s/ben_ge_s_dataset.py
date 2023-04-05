@@ -4,7 +4,7 @@ from typing import Union, Optional, List
 
 import numpy as np
 import pandas as pd
-import torch
+import rasterio
 from torch import nn
 
 # PyTorch
@@ -15,6 +15,7 @@ from remote_sensing_core.constants import (
     S1_IMG_KEY,
     S2_IMG_KEY,
     WORLD_COVER_IMG_KEY,
+    ALTITUDE_IMG_KEY,
     STACKED_IMAGE_KEY,
     MULTICLASS_LABEL_KEY,
     NUMPY_DTYPE,
@@ -27,6 +28,7 @@ class BenGeS(Dataset):
         root_dir_s1: Union[str, Path],
         root_dir_s2: Union[str, Path],
         root_dir_world_cover: Union[str, Path],
+        root_dir_glo_30_dem: Union[str, Path],
         era5_data_path: Union[str, Path],
         esa_world_cover_index_path: Union[str, Path],
         sentinel_1_2_metadata_path: Union[str, Path],
@@ -40,9 +42,9 @@ class BenGeS(Dataset):
         self.root_dir_s1 = root_dir_s1
         self.root_dir_s2 = root_dir_s2
         self.root_dir_world_cover = root_dir_world_cover
+        self.root_dir_glo_30_dem = root_dir_glo_30_dem
         # Read in csv for climate data
         self.era5_data = pd.read_csv(era5_data_path)
-        # TODO add altitude model root path
 
         # Read in csv files for indexing
         self.esa_world_cover_index = pd.read_csv(esa_world_cover_index_path)
@@ -79,11 +81,17 @@ class BenGeS(Dataset):
         )
 
         # World cover
-        img_world_cover = np.load(
-            os.path.join(self.root_dir_world_cover, patch_id) + "_esaworldcover.npy"
-        ) / 10.0 - 1
+        img_world_cover = (
+            np.load(
+                os.path.join(self.root_dir_world_cover, patch_id) + "_esaworldcover.npy"
+            )
+            / 10.0
+            - 1
+        )
 
-        # TODO Altitude data
+        # Altitude data from glo_dem_30 model
+        img_altitude = self._load_altitude_image(patch_id)
+
         # TODO Climate data
 
         # Define output tensor
@@ -91,6 +99,7 @@ class BenGeS(Dataset):
             S1_IMG_KEY: img_s1,
             S2_IMG_KEY: img_s2,
             WORLD_COVER_IMG_KEY: img_world_cover,
+            ALTITUDE_IMG_KEY: img_altitude,
         }
         if self.stacked_modalities:
             output_tensor = {
@@ -120,6 +129,13 @@ class BenGeS(Dataset):
         if self.s2_bands != Bands.ALL:
             raise NotImplementedError(f"S2 image bands {self.s2_bands} not implemented")
         return img_s2
+
+    def _load_altitude_image(self, patch_id):
+        with rasterio.open(
+            os.path.join(self.root_dir_glo_30_dem, patch_id + "_dem.tif")
+        ) as image_file:
+            img_altitude = image_file.read()
+        return img_altitude
 
     def _transform_numpy_images(self, img: np.array):
         img = img.astype(NUMPY_DTYPE)
