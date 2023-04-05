@@ -86,6 +86,7 @@ class BenGeS(Dataset):
 
         if self.bands == Bands.RGB:
             img_s2 = img_s2[[3, 2, 1], :, :]
+            assert img_s2.shape == (3, 120, 120), print("False shape:", img_s2.shape)
         if self.bands == Bands.INFRARED:
             img_s2 = img_s2[[7, 3, 2, 1], :, :]
         if self.bands == Bands.ALL:
