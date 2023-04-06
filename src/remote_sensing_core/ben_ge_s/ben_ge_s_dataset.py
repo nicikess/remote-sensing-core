@@ -83,7 +83,7 @@ class BenGeS(Dataset):
         # World cover
         img_world_cover = (
             np.load(
-                os.path.join(self.root_dir_world_cover, patch_id) + "_esaworldcover.npy"
+                os.path.join(self.root_dir_world_cover, "npy", patch_id) + "_esaworldcover.npy"
             )
             / 10.0
             - 1
