@@ -34,7 +34,7 @@ class BenGeS(Dataset):
         sentinel_1_2_metadata_path: Union[str, Path],
         s2_bands: Union[str, Bands],
         transform: Optional[nn.Module] = None,
-        multiclass_label_threshold: float = 0.3,
+        multiclass_label_threshold: float = 0.05,
         multiclass_label_top_k: int = 3,
         normalization_value: float = 10000.0,
         stacked_modalities: Optional[List] = None,
@@ -120,7 +120,7 @@ class BenGeS(Dataset):
 
     def _load_sentinel_2_image(self, patch_id):
         path_image_s2 = os.path.join(self.root_dir_s2, patch_id) + "_all_bands.npy"
-        img_s2 = np.load(path_image_s2)
+        img_s2 = np.clip(np.load(path_image_s2), 0, 10000)
         if self.s2_bands == Bands.RGB:
             img_s2 = img_s2[[3, 2, 1], :, :]
             assert img_s2.shape == (3, 120, 120), print("False shape:", img_s2.shape)
