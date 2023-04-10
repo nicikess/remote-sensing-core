@@ -71,23 +71,10 @@ class BenGeS(Dataset):
         # Load modalities
         patch_id = self.esa_world_cover_index.loc[:, "patch_id"][idx]
 
-        # Load, convert and normalize sentinel 1 and 2 images
-        img_s1, img_s2 = (
-            self._transform_numpy_images(img)
-            for img in (
-                self._load_sentinel_1_image(patch_id),
-                self._load_sentinel_2_image(patch_id),
-            )
-        )
-
-        # World cover
-        img_world_cover = (
-            np.load(
-                os.path.join(self.root_dir_world_cover, "npy", patch_id) + "_esaworldcover.npy"
-            )
-            / 10.0
-            - 1
-        )
+        # Load and convert sentinel 1, sentinel 2 and world cover images
+        img_s1 = self._transform_s1_image(self._load_sentinel_1_image(patch_id))
+        img_s2 = self._transform_s2_image(self._load_sentinel_2_image(patch_id))
+        img_world_cover = self._transform_world_cover_image(self._load_world_cover_image(patch_id))
 
         # Altitude data from glo_dem_30 model
         img_altitude = self._load_altitude_image(patch_id)
@@ -120,15 +107,20 @@ class BenGeS(Dataset):
 
     def _load_sentinel_2_image(self, patch_id):
         path_image_s2 = os.path.join(self.root_dir_s2, patch_id) + "_all_bands.npy"
-        img_s2 = np.clip(np.load(path_image_s2), 0, 10000)
+        img_s2 = np.load(path_image_s2)
         if self.s2_bands == Bands.RGB:
             img_s2 = img_s2[[3, 2, 1], :, :]
             assert img_s2.shape == (3, 120, 120), print("False shape:", img_s2.shape)
         if self.s2_bands == Bands.INFRARED:
             img_s2 = img_s2[[7, 3, 2, 1], :, :]
-        if self.s2_bands != Bands.ALL:
+        if self.s2_bands not in Bands:
             raise NotImplementedError(f"S2 image bands {self.s2_bands} not implemented")
         return img_s2
+
+    def _load_world_cover_image(self, patch_id):
+        path_image_world_cover = os.path.join(self.root_dir_world_cover, patch_id) + "_esaworldcover.npy"
+        world_cover_img = np.load(path_image_world_cover)
+        return world_cover_img
 
     def _load_altitude_image(self, patch_id):
         with rasterio.open(
@@ -137,11 +129,23 @@ class BenGeS(Dataset):
             img_altitude = image_file.read()
         return img_altitude
 
-    def _transform_numpy_images(self, img: np.array):
+    def _transform_s1_image(self, img: np.array):
+        img = img.astype(NUMPY_DTYPE)
+        if self.transform:
+            img = self.transform(img)
+        return img
+
+    def _transform_s2_image(self, img: np.array):
+        img = np.clip(img, 0, 10000)
         img = img.astype(NUMPY_DTYPE)
         img = img / self.normalization_value
         if self.transform:
             img = self.transform(img)
+        return img
+
+    def _transform_world_cover_image(self, img: np.array):
+        img = (img / 10.0) - 1
+        img = img.astype(NUMPY_DTYPE)
         return img
 
     def _derive_multiclass_label(self, idx):
