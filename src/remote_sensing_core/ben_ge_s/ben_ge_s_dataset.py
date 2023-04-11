@@ -1,6 +1,6 @@
 import os
 from pathlib import Path
-from typing import Union, Optional, List
+from typing import Tuple, Union, Optional, List
 
 import numpy as np
 import pandas as pd
@@ -38,6 +38,7 @@ class BenGeS(Dataset):
         multiclass_label_top_k: int = 3,
         normalization_value: float = 10000.0,
         stacked_modalities: Optional[List] = None,
+        s2_transform: Optional[nn.Module] = None,
     ):
         self.root_dir_s1 = root_dir_s1
         self.root_dir_s2 = root_dir_s2
@@ -60,6 +61,9 @@ class BenGeS(Dataset):
         self.multiclass_label_threshold = multiclass_label_threshold
         self.multiclass_label_top_k = multiclass_label_top_k
         self.normalization_value = normalization_value
+
+        # Set modality specific transforms
+        self.s2_transform = s2_transform
 
         # Parameters which control output format
         self.stacked_modalities = stacked_modalities
@@ -136,7 +140,10 @@ class BenGeS(Dataset):
     def _transform_s2_image(self, img: np.array):
         img = np.clip(img, 0, 10000)
         img = img.astype(NUMPY_DTYPE)
-        img = img / self.normalization_value
+        if self.s2_transform:
+            img = self.s2_transform(img)
+        else:
+            img = img / self.normalization_value
         if self.transform:
             img = self.transform(img)
         return img
