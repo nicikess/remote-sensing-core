@@ -78,8 +78,12 @@ class BenGeS(Dataset):
         # Load and transform sentinel 1, sentinel 2, world cover and altitude images
         img_s1 = self._transform_s1_image(self._load_sentinel_1_image(patch_id))
         img_s2 = self._transform_s2_image(self._load_sentinel_2_image(patch_id))
-        img_world_cover = self._transform_world_cover_image(self._load_world_cover_image(patch_id))
-        img_altitude = self._transform_altitude_image(self._load_altitude_image(patch_id))
+        img_world_cover = self._transform_world_cover_image(
+            self._load_world_cover_image(patch_id)
+        )
+        img_altitude = self._transform_altitude_image(
+            self._load_altitude_image(patch_id)
+        )
 
         # TODO Climate data
 
@@ -120,7 +124,9 @@ class BenGeS(Dataset):
         return img_s2
 
     def _load_world_cover_image(self, patch_id):
-        path_image_world_cover = os.path.join(self.root_dir_world_cover, patch_id) + "_esaworldcover.npy"
+        path_image_world_cover = (
+            os.path.join(self.root_dir_world_cover, patch_id) + "_esaworldcover.npy"
+        )
         world_cover_img = np.load(path_image_world_cover)
         return world_cover_img
 
