@@ -1,10 +1,7 @@
-import os
 from pathlib import Path
-from typing import Dict, Union, Optional, List
+from typing import Dict, Union, Optional
 
-import numpy as np
 import pandas as pd
-import rasterio
 from torch import nn
 
 # PyTorch
