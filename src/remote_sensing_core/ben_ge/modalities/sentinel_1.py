@@ -14,12 +14,11 @@ class Sentinel1Modality(Modality):
 
     def __init__(
         self,
-        data_root_path: Union[str, Path],
         sentinel_1_2_metadata_path: Union[str, Path],
         *args,
         **kwargs
     ):
-        super().__init__(data_root_path=data_root_path, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.sentinel_1_2_metadata = pd.read_csv(sentinel_1_2_metadata_path)
 
     def load_sample(self, patch_id, *args, **kwargs):
