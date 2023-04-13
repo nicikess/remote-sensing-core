@@ -20,8 +20,8 @@ class EsaWorldCoverModality(Modality):
         *args,
         **kwargs
     ):
-        super().__init__(*args, **kwargs)
-        self.esa_world_cover_index = pd.read_csv(esa_world_cover_index_path)
+        super().__init__(data_root_path=esa_world_cover_index_path, *args, **kwargs)
+        self.esa_world_cover_index = pd.read_csv(self.data_root_path)
 
         label_vector = self.esa_world_cover_index.loc[[0]]
         label_vector = label_vector.drop(["filename", "patch_id"], axis=1)
