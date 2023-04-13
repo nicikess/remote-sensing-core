@@ -20,5 +20,5 @@ class Sentinel1Modality(Modality):
         file_name_s1 = sentinel_1_2_metadata.loc[
             sentinel_1_2_metadata["patch_id"] == patch_id, "patch_id_s1"
         ].values[0]
-        path_image_s1 = self.data_root_path.joinpath(file_name_s1) + "_all_bands.npy"
+        path_image_s1 = self.data_root_path.joinpath(file_name_s1 + "_all_bands.npy")
         return self.transform_sample(np.load(path_image_s1))
