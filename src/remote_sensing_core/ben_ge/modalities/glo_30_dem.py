@@ -12,8 +12,8 @@ from remote_sensing_core.ben_ge.modalities.modality import Modality
 class Glo30DemModality(Modality):
     NAME = "glo_30_dem"
 
-    def __init__(self, data_root_path: Union[str, Path], *args, **kwargs):
-        super().__init__(data_root_path=data_root_path, *args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
     def load_sample(self, patch_id, *args, **kwargs):
         with rio.open(

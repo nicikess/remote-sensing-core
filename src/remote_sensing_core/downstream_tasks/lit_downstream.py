@@ -38,8 +38,5 @@ class LitDownstream(pl.LightningModule):
         }
 
 
-if __name__ == '__main__':
-    batch = {
-        "s2_img": torch.randn(11, 120, 120),
-        "single_label": 4
-    }
+if __name__ == "__main__":
+    batch = {"s2_img": torch.randn(11, 120, 120), "single_label": 4}

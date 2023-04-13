@@ -13,9 +13,7 @@ from remote_sensing_core.ben_ge.modalities.esa_worldcover import EsaWorldCoverMo
 from remote_sensing_core.ben_ge.modalities.glo_30_dem import Glo30DemModality
 from remote_sensing_core.ben_ge.modalities.era5 import Era5Modality
 from remote_sensing_core.ben_ge.modalities.modality import Modality
-from remote_sensing_core.constants import (
-    MULTICLASS_LABEL_KEY,
-)
+from remote_sensing_core.constants import MULTICLASS_LABEL_KEY
 
 
 class BenGeS(Dataset):
@@ -62,7 +60,9 @@ class BenGeS(Dataset):
 
         # Define output tensor
         output_tensor = {
-            modality_name: modality_class.load_sample(patch_id=patch_id)
+            modality_name: modality_class.load_sample(
+                patch_id=patch_id, sentinel_1_2_metadata=self.sentinel_1_2_metadata
+            )
             for modality_name, modality_class in self.modalities_dict.items()
         }
 
@@ -70,5 +70,7 @@ class BenGeS(Dataset):
         if EsaWorldCoverModality.NAME in self.modalities_dict.keys():
             ewc_modality = self.modalities_dict[EsaWorldCoverModality.NAME]
             assert isinstance(ewc_modality, EsaWorldCoverModality)
-            output_tensor[MULTICLASS_LABEL_KEY] = ewc_modality.get_world_cover_multiclass_label(patch_id=patch_id)
+            output_tensor[
+                MULTICLASS_LABEL_KEY
+            ] = ewc_modality.get_world_cover_multiclass_label(patch_id=patch_id)
         return output_tensor

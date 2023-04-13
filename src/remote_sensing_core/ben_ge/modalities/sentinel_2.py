@@ -14,13 +14,9 @@ class Sentinel2Modality(Modality):
     NAME = "sentinel_2"
 
     def __init__(
-        self,
-        data_root_path: Union[str, Path],
-        s2_bands: Union[str, Bands],
-        *args,
-        **kwargs,
+        self, s2_bands: Union[str, Bands], *args, **kwargs,
     ):
-        super().__init__(data_root_path=data_root_path, *args, **kwargs)
+        super().__init__(*args, **kwargs)
         self.s2_bands = s2_bands
 
     def load_sample(self, patch_id, *args, **kwargs):
