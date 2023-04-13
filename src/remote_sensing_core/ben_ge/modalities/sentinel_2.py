@@ -52,5 +52,5 @@ class Sentinel2Transform(nn.Module):
         if self.normalization_value:
             x /= self.normalization_value
         if self.transform:
-            x = self.transform
+            x = self.transform(x)
         return x
