@@ -17,7 +17,7 @@ class Sentinel2Modality(Modality):
         self, s2_bands: Union[str, Bands], *args, **kwargs,
     ):
         super().__init__(*args, **kwargs)
-        self.s2_bands = s2_bands
+        self.s2_bands = Bands(s2_bands)
 
     def load_sample(self, patch_id, *args, **kwargs):
         path_image_s2 = self.data_root_path.joinpath(patch_id, patch_id + "_all_bands.npy")
