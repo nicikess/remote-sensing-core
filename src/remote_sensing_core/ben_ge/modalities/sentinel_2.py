@@ -14,10 +14,7 @@ class Sentinel2Modality(Modality):
     NAME = "sentinel_2"
 
     def __init__(
-        self,
-        s2_bands: Union[str, Bands],
-        *args,
-        **kwargs,
+        self, s2_bands: Union[str, Bands], *args, **kwargs,
     ):
         super().__init__(*args, **kwargs)
         self.s2_bands = s2_bands
