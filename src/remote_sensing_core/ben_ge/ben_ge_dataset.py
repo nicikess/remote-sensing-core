@@ -16,7 +16,7 @@ from remote_sensing_core.ben_ge.modalities.modality import Modality
 from remote_sensing_core.constants import MULTICLASS_LABEL_KEY
 
 
-class BenGeS(Dataset):
+class BenGe(Dataset):
     def __init__(
         self,
         data_index_path: Union[str, Path],
