@@ -14,13 +14,14 @@ class EsaWorldCoverModality(Modality):
 
     def __init__(
         self,
+        esa_world_cover_index_path: Union[str, Path],
         multiclass_label_threshold: float = 0.05,
         multiclass_label_top_k: int = 3,
         *args,
         **kwargs
     ):
         super().__init__(*args, **kwargs)
-        self.esa_world_cover_index = pd.read_csv(self.data_root_path)
+        self.esa_world_cover_index = pd.read_csv(esa_world_cover_index_path)
 
         label_vector = self.esa_world_cover_index.loc[[0]]
         label_vector = label_vector.drop(["filename", "patch_id"], axis=1)
