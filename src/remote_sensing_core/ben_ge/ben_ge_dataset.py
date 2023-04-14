@@ -60,7 +60,13 @@ class BenGe(Dataset):
 
         # Define output tensor
         output_tensor = {
-            modality_name: modality_class.load_sample(
+            modality_name: self.transform(
+                modality_class.load_sample(
+                    patch_id=patch_id, sentinel_1_2_metadata=self.sentinel_1_2_metadata
+                )
+            )
+            if self.transform
+            else modality_class.load_sample(
                 patch_id=patch_id, sentinel_1_2_metadata=self.sentinel_1_2_metadata
             )
             for modality_name, modality_class in self.modalities_dict.items()
