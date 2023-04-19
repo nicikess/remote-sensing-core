@@ -9,7 +9,7 @@ from ffcv.pipeline.allocation_query import AllocationQuery
 from ffcv.pipeline.state import State
 
 
-class Padding(Operation):
+class Clipping(Operation):
     def __init__(self, clip_values: Tuple[int, int]):
         self.minimum, self.maximum = clip_values
 
