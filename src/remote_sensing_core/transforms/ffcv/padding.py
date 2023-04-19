@@ -43,8 +43,7 @@ class Padding(Operation):
         self, previous_state: State
     ) -> Tuple[State, Optional[AllocationQuery]]:
         c, h, w = previous_state.shape
-        new_shape = (c, h + 2 * self.padding, w + 2 * self.padding)
-        print("New shape", new_shape)
+        new_shape = (c, int(h + 2 * self.padding), int(w + 2 * self.padding))
 
         # Update state shape
         new_state = replace(previous_state, shape=new_shape)
