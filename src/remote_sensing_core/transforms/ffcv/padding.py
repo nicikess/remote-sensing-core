@@ -33,6 +33,7 @@ class Padding(Operation):
             new_images[:, :, padding:-padding, padding:-padding] = images
             return new_images
 
+        pad_images.is_parallel = True
         return pad_images
 
     def declare_state_and_memory(

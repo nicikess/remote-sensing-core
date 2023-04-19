@@ -24,7 +24,7 @@ class Convert(Operation):
         target_dtype = self.target_dtype
 
         def convert(inp, *args):
-            return inp.type(target_dtype)
+            return inp.astype(target_dtype)
 
         convert.is_parallel = True
         return convert
