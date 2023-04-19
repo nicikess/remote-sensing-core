@@ -25,14 +25,18 @@ class Padding(Operation):
             b, c, h, w = images.shape
 
             # create new images
-            new_images = np.full(shape=(b, c, int(h + 2 * padding), int(w + 2 * padding)), fill_value=padding_value)
+            new_images = np.full(
+                shape=(b, c, int(h + 2 * padding), int(w + 2 * padding)),
+                fill_value=padding_value,
+                dtype=images.dtype,
+            )
             new_images[:, :, padding:-padding, padding:-padding] = images
             return new_images
 
         return pad_images
 
     def declare_state_and_memory(
-            self, previous_state: State
+        self, previous_state: State
     ) -> Tuple[State, Optional[AllocationQuery]]:
         c, h, w = previous_state.shape
         new_shape = (c, int(h + 2 * self.padding), int(w + 2 * self.padding))
