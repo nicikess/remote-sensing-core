@@ -26,7 +26,7 @@ class Padding(Operation):
 
         def pad_images(images, *args):
             # Expects images to be a batch of images of shape CxHxW
-            batch_size, *_ = images.shape
+            batch_size = images.shape[0]
             # Pad each image in batch in parallel
             for i in image_range(batch_size):
                 images[i] = np.pad(
