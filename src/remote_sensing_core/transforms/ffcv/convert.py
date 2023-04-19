@@ -26,7 +26,6 @@ class Convert(Operation):
         def convert(inp, *args):
             return inp.astype(target_dtype)
 
-        convert.is_parallel = True
         return convert
 
     def declare_state_and_memory(
