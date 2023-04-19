@@ -21,7 +21,6 @@ class Clipping(Operation):
         def clip_images(images, *args):
             return np.clip(images, a_min=minimum, a_max=maximum)
 
-        clip_images.is_parallel = True
         return clip_images
 
     def declare_state_and_memory(
