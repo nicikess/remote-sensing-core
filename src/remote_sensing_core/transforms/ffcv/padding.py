@@ -44,10 +44,11 @@ class Padding(Operation):
     ) -> Tuple[State, Optional[AllocationQuery]]:
         c, h, w = previous_state.shape
         new_shape = (c, h + 2 * self.padding, w + 2 * self.padding)
+        print("New shape", new_shape)
 
         # Update state shape
         new_state = replace(previous_state, shape=new_shape)
 
         # Allocate memory for new image
-        mem_allocation = AllocationQuery(new_shape, previous_state.dtype)
+        mem_allocation = AllocationQuery(new_shape, dtype=previous_state.dtype)
         return new_state, mem_allocation
