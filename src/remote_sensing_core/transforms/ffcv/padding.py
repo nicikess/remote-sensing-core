@@ -8,7 +8,7 @@ import numpy as np
 from ffcv.pipeline.compiler import Compiler
 from ffcv.pipeline.operation import Operation
 from ffcv.pipeline.allocation_query import AllocationQuery
-from ffcv.pipeline.State import State
+from ffcv.pipeline.state import State
 
 
 class Padding(Operation):
