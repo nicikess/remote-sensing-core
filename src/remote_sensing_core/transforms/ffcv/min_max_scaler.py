@@ -22,10 +22,10 @@ class MinMaxScaler(Operation):
 
     def generate_code(self) -> Callable:
         # get local variables to use in return function
-        minimum = self.minimum
-        maximum = self.maximum
-        interval_minimum = self.minimum_value
-        interval_maximum = self.maximum_value
+        minimum = self.minimum_value
+        maximum = self.maximum_value
+        interval_minimum = self.interval_min
+        interval_maximum = self.interval_max
 
         def scale_images(images, *args):
             return ((images - minimum) / (maximum - minimum)) * (
