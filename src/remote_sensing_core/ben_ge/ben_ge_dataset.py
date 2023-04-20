@@ -84,3 +84,6 @@ class BenGe(Dataset):
         if self.output_as_tuple:
             output_tensor = (v for k, v in output_tensor.items())
         return output_tensor
+
+    def __str__(self):
+        return list(self.modalities_dict.keys())
