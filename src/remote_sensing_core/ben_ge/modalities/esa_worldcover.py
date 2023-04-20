@@ -82,7 +82,7 @@ class ESAWorldCoverTransform(nn.Module):
             x = ((x / self.divisor[0]) - self.divisor[1])
         if self.convert_to_label:
             x = np.squeeze(x, axis=0)
-            x = x.astype(np.long)
+            x = x.astype('int32')
         if self.transform:
             x = self.transform(x)
         return x
