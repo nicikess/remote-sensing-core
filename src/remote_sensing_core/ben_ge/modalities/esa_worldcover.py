@@ -4,6 +4,8 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from typing import Optional, Tuple
+from torch import nn
 
 # Remote sensing core
 from remote_sensing_core.ben_ge.modalities.modality import Modality
@@ -59,3 +61,22 @@ class EsaWorldCoverModality(Modality):
         if self.numpy_dtype:
             label = label.astype(self.numpy_dtype)
         return label
+
+class ESAWorldCoverTransform(nn.Module):
+    def __init__(
+        self,
+        divisor: Optional[Tuple[int]] = (10, -1),
+        transform: Optional[nn.Module] = None,
+        *args,
+        **kwargs,
+    ):
+        super().__init__(*args, **kwargs)
+        self.divisor = divisor
+        self.transform = transform
+
+    def forward(self, x, *args, **kwargs):
+        if self.divisor:
+            x = x / self.divisor[0] - self.divisor[1]
+        if self.transform:
+            x = self.transform(x)
+        return x
