@@ -40,14 +40,14 @@ class EsaWorldCoverModality(Modality):
         return self.transform_sample(world_cover_img)
 
     def get_world_cover_multiclass_label(self, patch_id):
-        label_vector = self.esa_world_cover_index.loc[
+        esa_row = self.esa_world_cover_index.loc[
             self.esa_world_cover_index["patch_id"] == patch_id
         ]
-        assert len(label_vector) == 1
-        label_vector = label_vector.drop(["filename", "patch_id"], axis=1)
+        assert len(esa_row) == 1
+        numeric_label = esa_row.drop(["filename", "patch_id"], axis=1)
         # Set values to smaller than the threshold to 0
         label_vector = np.where(
-            label_vector <= self.multiclass_label_threshold, 0, label_vector
+            numeric_label <= self.multiclass_label_threshold, 0, numeric_label
         )
         label_vector = np.squeeze(label_vector)
         # Get indexes of largest values
@@ -55,13 +55,13 @@ class EsaWorldCoverModality(Modality):
             -self.multiclass_label_top_k :
         ]
         # Create label encoding and set to one if value is not 0
-        label = np.zeros(self.number_of_classes)
+        one_hot_label = np.zeros(self.number_of_classes)
         for i in range(len(max_indices)):
             if label_vector[max_indices[i]] > 0:
-                label[max_indices[i]] = 1
+                one_hot_label[max_indices[i]] = 1
         if self.numpy_dtype:
-            label = label.astype(self.numpy_dtype)
-        return label
+            one_hot_label = one_hot_label.astype(self.numpy_dtype)
+        return one_hot_label, numeric_label
 
 class ESAWorldCoverTransform(nn.Module):
     def __init__(
