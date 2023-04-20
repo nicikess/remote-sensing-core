@@ -20,7 +20,9 @@ class Sentinel2Modality(Modality):
         self.s2_bands = Bands(s2_bands)
 
     def load_sample(self, patch_id, *args, **kwargs):
-        path_image_s2 = self.data_root_path.joinpath(patch_id, patch_id + "_all_bands.npy")
+        path_image_s2 = self.data_root_path.joinpath(
+            patch_id, patch_id + "_all_bands.npy"
+        )
         img_s2 = np.load(path_image_s2)
         if self.s2_bands == Bands.RGB:
             img_s2 = img_s2[[3, 2, 1], :, :]
