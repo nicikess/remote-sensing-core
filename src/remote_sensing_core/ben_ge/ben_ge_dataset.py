@@ -80,4 +80,4 @@ class BenGe(Dataset):
         return output_tensor
 
     def __str__(self):
-        return  str(list(self.modalities_dict.keys()))
+        return list(self.modalities_dict.keys())
