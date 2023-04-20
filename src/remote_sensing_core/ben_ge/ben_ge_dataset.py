@@ -27,11 +27,13 @@ class BenGe(Dataset):
         glo_30_dem_modality: Optional[Glo30DemModality] = None,
         era_5_modality: Optional[Era5Modality] = None,
         transform: Optional[nn.Module] = None,
+        output_as_tuple: bool = False,
     ):
         # Read in csv files for indexing
         self.data_index = pd.read_csv(data_index_path)
         self.sentinel_1_2_metadata = pd.read_csv(sentinel_1_2_metadata_path)
         self.transform = transform
+        self.output_as_tuple = output_as_tuple
 
         # Register modalities
         self.modalities_dict: Dict[str, Modality] = {}
@@ -73,4 +75,9 @@ class BenGe(Dataset):
             output_tensor[
                 MULTICLASS_LABEL_KEY
             ] = ewc_modality.get_world_cover_multiclass_label(patch_id=patch_id)
+        if self.output_as_tuple:
+            output_tensor = (v for k, v in output_tensor.items())
         return output_tensor
+
+    def __str__(self):
+        return  str(list(self.modalities_dict.keys()))
