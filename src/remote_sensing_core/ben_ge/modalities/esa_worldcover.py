@@ -61,7 +61,7 @@ class EsaWorldCoverModality(Modality):
                 one_hot_label[max_indices[i]] = 1
         if self.numpy_dtype:
             one_hot_label = one_hot_label.astype(self.numpy_dtype)
-            numeric_label = numeric_label.astype(self.numpy_dtype)
+            numeric_label = numeric_label.values.astype(self.numpy_dtype)
         return one_hot_label, numeric_label
 
 class ESAWorldCoverTransform(nn.Module):
