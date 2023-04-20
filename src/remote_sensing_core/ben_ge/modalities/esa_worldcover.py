@@ -49,6 +49,7 @@ class EsaWorldCoverModality(Modality):
         label_vector = np.where(
             numeric_label <= self.multiclass_label_threshold, 0, numeric_label
         )
+        numeric_label = np.squeeze(numeric_label.values)
         label_vector = np.squeeze(label_vector)
         # Get indexes of largest values
         max_indices = np.argpartition(label_vector, -self.multiclass_label_top_k)[
