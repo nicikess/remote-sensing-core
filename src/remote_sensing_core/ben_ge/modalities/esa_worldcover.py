@@ -7,7 +7,6 @@ import pandas as pd
 from typing import Optional, Tuple
 
 from torch import nn
-import torch
 
 # Remote sensing core
 from remote_sensing_core.ben_ge.modalities.modality import Modality
@@ -83,7 +82,7 @@ class ESAWorldCoverTransform(nn.Module):
             x = ((x / self.divisor[0]) - self.divisor[1])
         if self.convert_to_label:
             x = np.squeeze(x, axis=0)
-            x = torch.from_numpy(x).type(torch.long)
+            x = x.astype('int64')
         if self.transform:
             x = self.transform(x)
         return x
