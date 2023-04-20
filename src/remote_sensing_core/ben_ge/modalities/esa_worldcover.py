@@ -62,10 +62,10 @@ class EsaWorldCoverModality(Modality):
             label = label.astype(self.numpy_dtype)
         return label
 
-class ESAWorldCoverTransform(nn.Module):
+class EsaWorldCoverTransform(nn.Module):
     def __init__(
         self,
-        divisor: Optional[Tuple[int]] = (10, -1),
+        divisor: Optional[Tuple[int]] = (10, 1),
         transform: Optional[nn.Module] = None,
         *args,
         **kwargs,
@@ -76,7 +76,7 @@ class ESAWorldCoverTransform(nn.Module):
 
     def forward(self, x, *args, **kwargs):
         if self.divisor:
-            x = x / self.divisor[0] - self.divisor[1]
+            x = ((x / self.divisor[0]) - self.divisor[1])
         if self.transform:
             x = self.transform(x)
         return x
