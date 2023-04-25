@@ -20,7 +20,7 @@ class EsaWorldCoverModality(Modality):
         multiclass_label_threshold: float = 0.05,
         multiclass_label_top_k: int = 3,
         *args,
-        **kwargs
+        **kwargs,
     ):
         super().__init__(*args, **kwargs)
         self.esa_world_cover_index = pd.read_csv(esa_world_cover_index_path)
@@ -62,6 +62,7 @@ class EsaWorldCoverModality(Modality):
             label = label.astype(self.numpy_dtype)
         return label
 
+
 class EsaWorldCoverTransform(nn.Module):
     def __init__(
         self,
@@ -76,7 +77,7 @@ class EsaWorldCoverTransform(nn.Module):
 
     def forward(self, x, *args, **kwargs):
         if self.divisor:
-            x = ((x / self.divisor[0]) - self.divisor[1])
+            x = (x / self.divisor[0]) - self.divisor[1]
         if self.transform:
             x = self.transform(x)
         return x

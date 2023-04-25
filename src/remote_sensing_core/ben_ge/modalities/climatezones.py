@@ -1,5 +1,3 @@
-
-
 # Remote sensing core
 from remote_sensing_core.ben_ge.modalities.modality import Modality
 
