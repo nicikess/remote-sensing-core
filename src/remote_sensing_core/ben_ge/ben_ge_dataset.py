@@ -16,7 +16,11 @@ from remote_sensing_core.ben_ge.modalities.esa_worldcover import EsaWorldCoverMo
 from remote_sensing_core.ben_ge.modalities.glo_30_dem import Glo30DemModality
 from remote_sensing_core.ben_ge.modalities.era5 import Era5Modality
 from remote_sensing_core.ben_ge.modalities.modality import Modality
-from remote_sensing_core.constants import MULTICLASS_ONE_HOT_LABEL_KEY, MULTICLASS_NUMERIC_LABEL_KEY
+from remote_sensing_core.constants import (
+    MULTICLASS_ONE_HOT_LABEL_KEY,
+    MULTICLASS_NUMERIC_LABEL_KEY,
+    ELEVATION_DIFFERENCE_LABEL_KEY,
+)
 
 
 class BenGe(Dataset):
@@ -89,18 +93,30 @@ class BenGe(Dataset):
             for modality_name, modality_class in self.modalities_dict.items()
         }
 
-        # Get multiclass label for patch
+        # Get esa world cover labels
         if EsaWorldCoverModality.NAME in self.modalities_dict.keys():
             ewc_modality = self.modalities_dict[EsaWorldCoverModality.NAME]
             assert isinstance(ewc_modality, EsaWorldCoverModality)
-            one_hot_label, numeric_label = ewc_modality.get_world_cover_multiclass_label(patch_id=patch_id)
+            (
+                one_hot_label,
+                numeric_label,
+            ) = ewc_modality.get_world_cover_multiclass_label(patch_id=patch_id)
             output_tensor[MULTICLASS_ONE_HOT_LABEL_KEY] = one_hot_label
             output_tensor[MULTICLASS_NUMERIC_LABEL_KEY] = numeric_label
+
+        # Get Elevation labels
+        if Glo30DemModality.NAME in self.modalities_dict.keys():
+            elevation_modality = self.modalities_dict[Glo30DemModality.NAME]
+            assert isinstance(elevation_modality, Glo30DemModality)
+            output_tensor[
+                ELEVATION_DIFFERENCE_LABEL_KEY
+            ] = elevation_modality.get_elevation_difference_in_patch(patch_id=patch_id)
+
         # Return as tuple if desired
         if self.output_as_tuple:
             mapping = []
             output_tensor_tuple = tuple()
-            for k, v in output_tensor.items():
+            for k, v in dict(sorted(output_tensor.items(), key=lambda x: x[0].lower())).items():
                 mapping.append(k)
                 output_tensor_tuple += (v,)
             output_tensor_tuple += (mapping,)

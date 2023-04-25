@@ -21,3 +21,10 @@ class Glo30DemModality(Modality):
         ) as image_file:
             img_altitude = image_file.read()
         return self.transform_sample(img_altitude)
+
+    def get_elevation_difference_in_patch(self, patch_id):
+        with rio.open(
+            os.path.join(self.data_root_path, patch_id + "_dem.tif")
+        ) as image_file:
+            img_altitude = image_file.read()[0]
+        return img_altitude.max() - img_altitude.min()

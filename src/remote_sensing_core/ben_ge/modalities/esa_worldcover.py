@@ -67,7 +67,6 @@ class EsaWorldCoverModality(Modality):
 
 
 class EsaWorldCoverTransform(nn.Module):
-
     def __init__(
         self,
         divisor: Optional[Tuple[int]] = (10, 1),
@@ -83,10 +82,10 @@ class EsaWorldCoverTransform(nn.Module):
 
     def forward(self, x, *args, **kwargs):
         if self.divisor:
-            x = ((x / self.divisor[0]) - self.divisor[1])
+            x = (x / self.divisor[0]) - self.divisor[1]
         if self.convert_to_label:
             x = np.squeeze(x, axis=0)
-            x = x.astype('int64')
+            x = x.astype("int64")
         if self.transform:
             x = self.transform(x)
         return x
