@@ -16,7 +16,7 @@ from remote_sensing_core.ben_ge.modalities.esa_worldcover import EsaWorldCoverMo
 from remote_sensing_core.ben_ge.modalities.glo_30_dem import Glo30DemModality
 from remote_sensing_core.ben_ge.modalities.era5 import Era5Modality
 from remote_sensing_core.ben_ge.modalities.modality import Modality
-from remote_sensing_core.constants import MULTICLASS_LABEL_KEY
+from remote_sensing_core.constants import MULTICLASS_ONE_HOT_LABEL_KEY, MULTICLASS_NUMERIC_LABEL_KEY
 
 
 class BenGe(Dataset):
@@ -93,10 +93,9 @@ class BenGe(Dataset):
         if EsaWorldCoverModality.NAME in self.modalities_dict.keys():
             ewc_modality = self.modalities_dict[EsaWorldCoverModality.NAME]
             assert isinstance(ewc_modality, EsaWorldCoverModality)
-            output_tensor[
-                MULTICLASS_LABEL_KEY
-            ] = ewc_modality.get_world_cover_multiclass_label(patch_id=patch_id)
-
+            one_hot_label, numeric_label = ewc_modality.get_world_cover_multiclass_label(patch_id=patch_id)
+            output_tensor[MULTICLASS_ONE_HOT_LABEL_KEY] = one_hot_label
+            output_tensor[MULTICLASS_NUMERIC_LABEL_KEY] = numeric_label
         # Return as tuple if desired
         if self.output_as_tuple:
             mapping = []
