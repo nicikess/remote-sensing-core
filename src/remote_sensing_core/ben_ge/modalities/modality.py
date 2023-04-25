@@ -10,11 +10,11 @@ class Modality(ABC):
 
     def __init__(
         self,
-        data_root_path: Union[str, Path],
+        data_root_path: Optional[Union[str, Path]] = None,
         transform: Optional[nn.Module] = None,
         numpy_dtype: Optional[str] = None,
     ):
-        self.data_root_path = Path(data_root_path)
+        self.data_root_path = Path(data_root_path) if data_root_path else None
         self.transform = transform
         self.numpy_dtype = numpy_dtype
 
