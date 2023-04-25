@@ -107,3 +107,6 @@ class BenGe(Dataset):
             output_tensor_tuple += (mapping,)
             return output_tensor_tuple
         return output_tensor
+
+    def __str__(self):
+        return list(self.modalities_dict.keys())
