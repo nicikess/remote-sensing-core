@@ -7,6 +7,7 @@ from torch import nn
 # PyTorch
 from torch.utils.data import Dataset
 
+from remote_sensing_core.ben_ge.modalities.climatezones import ClimateZoneModality
 from remote_sensing_core.ben_ge.modalities.sentinel_1 import Sentinel1Modality
 from remote_sensing_core.ben_ge.modalities.season_s1 import SeasonS1Modality
 from remote_sensing_core.ben_ge.modalities.season_s2 import SeasonS2Modality
@@ -62,6 +63,9 @@ class BenGe(Dataset):
         # Climate data
         if era_5_modality:
             self.modalities_dict[Era5Modality.NAME] = era_5_modality
+        # Climate zone
+        if climate_zone_modality:
+            self.modalities_dict[ClimateZoneModality.NAME] = climate_zone_modality
 
     def __len__(self):
         return len(self.data_index)
