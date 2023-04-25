@@ -8,6 +8,8 @@ from torch import nn
 from torch.utils.data import Dataset
 
 from remote_sensing_core.ben_ge.modalities.sentinel_1 import Sentinel1Modality
+from remote_sensing_core.ben_ge.modalities.season_s1 import SeasonS1Modality
+from remote_sensing_core.ben_ge.modalities.season_s2 import SeasonS2Modality
 from remote_sensing_core.ben_ge.modalities.sentinel_2 import Sentinel2Modality
 from remote_sensing_core.ben_ge.modalities.esa_worldcover import EsaWorldCoverModality
 from remote_sensing_core.ben_ge.modalities.glo_30_dem import Glo30DemModality
@@ -22,6 +24,8 @@ class BenGe(Dataset):
         data_index_path: Union[str, Path],
         sentinel_1_2_metadata_path: Union[str, Path],
         sentinel_1_modality: Optional[Sentinel1Modality] = None,
+        season_s1_modality: Optional[SeasonS2Modality] = None,
+        season_s2_modality: Optional[SeasonS2Modality] = None,
         sentinel_2_modality: Optional[Sentinel2Modality] = None,
         esa_world_cover_modality: Optional[EsaWorldCoverModality] = None,
         glo_30_dem_modality: Optional[Glo30DemModality] = None,
@@ -40,9 +44,15 @@ class BenGe(Dataset):
         # Sentinel 1
         if sentinel_1_modality:
             self.modalities_dict[Sentinel1Modality.NAME] = sentinel_1_modality
+        # S1 Season Data
+        if season_s1_modality:
+            self.modalities_dict[SeasonS1Modality.NAME] = season_s1_modality
         # Sentinel 2
         if sentinel_2_modality:
             self.modalities_dict[Sentinel2Modality.NAME] = sentinel_2_modality
+        # S2 Season Data
+        if season_s2_modality:
+            self.modalities_dict[SeasonS2Modality.NAME] = season_s2_modality
         # WorldCover
         if esa_world_cover_modality:
             self.modalities_dict[EsaWorldCoverModality.NAME] = esa_world_cover_modality
