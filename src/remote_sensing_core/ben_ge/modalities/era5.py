@@ -15,4 +15,7 @@ class Era5Modality(Modality):
         self.era5_data = pd.read_csv(self.data_root_path)
 
     def load_sample(self, patch_id, *args, **kwargs):
-        raise NotImplementedError
+        weather_data = self.era5_data.loc[
+            self.era5_data["patch_id"] == patch_id
+        ].values[0]
+        return weather_data[2:]  # exclude patch ids
