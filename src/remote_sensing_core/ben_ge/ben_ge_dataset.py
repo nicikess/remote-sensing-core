@@ -31,6 +31,7 @@ class BenGe(Dataset):
         esa_world_cover_modality: Optional[EsaWorldCoverModality] = None,
         glo_30_dem_modality: Optional[Glo30DemModality] = None,
         era_5_modality: Optional[Era5Modality] = None,
+        climate_zone_modality: Optional[ClimateZoneModality] = None,
         transform: Optional[nn.Module] = None,
         output_as_tuple: bool = False,
     ):
@@ -95,6 +96,14 @@ class BenGe(Dataset):
             output_tensor[
                 MULTICLASS_LABEL_KEY
             ] = ewc_modality.get_world_cover_multiclass_label(patch_id=patch_id)
+
+        # Return as tuple if desired
         if self.output_as_tuple:
-            output_tensor = (v for k, v in output_tensor.items())
+            mapping = []
+            output_tensor_tuple = tuple()
+            for k, v in output_tensor.items():
+                mapping.append(k)
+                output_tensor_tuple += (v,)
+            output_tensor_tuple += (mapping,)
+            return output_tensor_tuple
         return output_tensor
