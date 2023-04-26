@@ -1,3 +1,5 @@
+import pandas as pd
+
 # Remote sensing core
 from remote_sensing_core.ben_ge.modalities.modality import Modality
 
@@ -7,10 +9,11 @@ class ClimateZoneModality(Modality):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        assert self.data_root_path
+        self.climate_zone_data = pd.read_csv(self.data_root_path)
 
     def load_sample(self, patch_id, *args, **kwargs):
-        sentinel_1_2_metadata = kwargs["sentinel_1_2_metadata"]
-        climate_zone = sentinel_1_2_metadata.loc[
-            sentinel_1_2_metadata["patch_id"] == patch_id, "climatezone"
+        climate_zone = self.climate_zone_data.loc[
+            self.climate_zone_data["patch_id"] == patch_id, "climatezone"
         ].values[0]
         return climate_zone
