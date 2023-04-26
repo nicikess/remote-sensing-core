@@ -19,7 +19,7 @@ class Sentinel2Modality(Modality):
         super().__init__(*args, **kwargs)
         self.s2_bands = Bands(s2_bands)
 
-    def load_sample(self, patch_id, *args, **kwargs):
+    def _load(self, patch_id, *args, **kwargs):
         path_image_s2 = self.data_root_path.joinpath(
             patch_id, patch_id + "_all_bands.npy"
         )
@@ -31,7 +31,7 @@ class Sentinel2Modality(Modality):
             img_s2 = img_s2[[7, 3, 2, 1], :, :]
         if self.s2_bands not in Bands:
             raise NotImplementedError(f"S2 image bands {self.s2_bands} not implemented")
-        return self.transform_sample(img_s2)
+        return img_s2
 
 
 class Sentinel2Transform(nn.Module):

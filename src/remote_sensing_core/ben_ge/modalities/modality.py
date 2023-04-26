@@ -19,8 +19,11 @@ class Modality(ABC):
         self.numpy_dtype = numpy_dtype
 
     @abstractmethod
-    def load_sample(self, patch_id, *args, **kwargs):
+    def _load(self, patch_id, *args, **kwargs):
         pass
+
+    def load_sample(self, patch_id, *args, **kwargs):
+        return self.transform_sample(sample=self._load(patch_id=patch_id, *args, **kwargs))
 
     def transform_sample(self, sample, *args, **kwargs):
         if self.numpy_dtype:

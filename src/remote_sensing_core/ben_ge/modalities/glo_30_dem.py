@@ -15,12 +15,12 @@ class Glo30DemModality(Modality):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def load_sample(self, patch_id, *args, **kwargs):
+    def _load(self, patch_id, *args, **kwargs):
         with rio.open(
             os.path.join(self.data_root_path, patch_id + "_dem.tif")
         ) as image_file:
             img_altitude = image_file.read()
-        return self.transform_sample(img_altitude)
+        return img_altitude
 
     def get_elevation_difference_in_patch(self, patch_id):
         with rio.open(

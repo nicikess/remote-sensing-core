@@ -14,8 +14,8 @@ class Era5Modality(Modality):
         super().__init__(*args, **kwargs)
         self.era5_data = pd.read_csv(self.data_root_path)
 
-    def load_sample(self, patch_id, *args, **kwargs):
+    def _load(self, patch_id, *args, **kwargs):
         weather_data = self.era5_data.loc[
             self.era5_data["patch_id"] == patch_id
         ].values[0]
-        return weather_data[2:]  # exclude patch ids
+        return self.transform_sample(weather_data[2:])  # exclude patch ids

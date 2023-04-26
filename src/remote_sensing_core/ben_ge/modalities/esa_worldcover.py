@@ -32,12 +32,12 @@ class EsaWorldCoverModality(Modality):
         self.multiclass_label_threshold = multiclass_label_threshold
         self.multiclass_label_top_k = multiclass_label_top_k
 
-    def load_sample(self, patch_id, *args, **kwargs):
+    def _load(self, patch_id, *args, **kwargs):
         path_image_world_cover = (
             os.path.join(self.data_root_path, patch_id) + "_esaworldcover.npy"
         )
         world_cover_img = np.load(path_image_world_cover)
-        return self.transform_sample(world_cover_img)
+        return world_cover_img
 
     def get_world_cover_multiclass_label(self, patch_id):
         esa_row = self.esa_world_cover_index.loc[

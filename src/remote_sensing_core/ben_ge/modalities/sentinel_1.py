@@ -15,7 +15,7 @@ class Sentinel1Modality(Modality):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-    def load_sample(self, patch_id, *args, **kwargs):
+    def _load(self, patch_id, *args, **kwargs):
         sentinel_1_2_metadata = kwargs["sentinel_1_2_metadata"]
         file_name_s1 = sentinel_1_2_metadata.loc[
             sentinel_1_2_metadata["patch_id"] == patch_id, "patch_id_s1"
@@ -23,4 +23,4 @@ class Sentinel1Modality(Modality):
         path_image_s1 = self.data_root_path.joinpath(
             file_name_s1, file_name_s1 + "_all_bands.npy"
         )
-        return self.transform_sample(np.load(path_image_s1))
+        return np.load(path_image_s1)

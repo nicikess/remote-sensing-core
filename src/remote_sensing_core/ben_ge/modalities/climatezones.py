@@ -12,7 +12,7 @@ class ClimateZoneModality(Modality):
         assert self.data_root_path
         self.climate_zone_data = pd.read_csv(self.data_root_path)
 
-    def load_sample(self, patch_id, *args, **kwargs):
+    def _load(self, patch_id, *args, **kwargs):
         climate_zone = self.climate_zone_data.loc[
             self.climate_zone_data["patch_id"] == patch_id, "climatezone"
         ].values[0]
