@@ -1,4 +1,4 @@
-from typing import Callable, Tuple, Optional, Union
+from typing import Callable, Tuple, Optional, List
 
 # Numpy
 import numpy as np
@@ -14,47 +14,24 @@ from remote_sensing_core.constants import Bands
 
 
 class ChannelSelector(Operation):
-    def __init__(self, s2_bands: Union[str, Bands]):
-        self.band_names = Bands(s2_bands)
+    def __init__(self, channels: List[int]):
+        self.channels = channels
 
     def generate_code(self) -> Callable:
         # get local variables to use in return function
-        bands = self.band_names
+        channels = np.array(self.channels, dtype=np.int64)
 
         def select_channels(images, *args):
-            if bands == Bands.RGB:
-                rgb_channels = [3, 2, 1]
-                rgb_channels = np.array(rgb_channels, dtype=np.int64)
-                images = images[:, rgb_channels, :, :]
-            elif bands == Bands.INFRARED:
-                infrared_channels = [7, 3, 2, 1]
-                infrared_channels = np.array(infrared_channels, dtype=np.int64)
-                images = images[:, infrared_channels, :, :]
-            elif bands == Bands.ALL:
-                pass
-            else:
-                raise NotImplementedError(f"Bands {bands} not implemented")
-            return images
+            return images[:, channels, ::]
 
         return select_channels
 
     def declare_state_and_memory(
         self, previous_state: State
     ) -> Tuple[State, Optional[AllocationQuery]]:
-        # Get original shape
-        c, h, w = previous_state.shape
-
-        # Update channels
-        channels = c
-        if self.band_names == Bands.RGB:
-            channels = 3
-        elif self.band_names == Bands.INFRARED:
-            channels = 4
-        elif self.band_names == Bands.ALL:
-            pass
-        else:
-            raise NotImplementedError(f"Bands {self.bands} not implemented")
-        shape = (channels, h, w)
+        # Get new shape
+        _, h, w = previous_state.shape
+        shape = (len(self.channels), h, w)
 
         # Update state shape
         new_state = replace(previous_state, shape=shape)
