@@ -13,7 +13,7 @@ from ffcv.pipeline.state import State
 from remote_sensing_core.constants import Bands
 
 
-class AddChannel(Operation):
+class Add1dChannel(Operation):
 
     def __init__(self, axis: int = 1):
         self.axis = axis
@@ -22,11 +22,11 @@ class AddChannel(Operation):
         # get local variables to use in return function
         axis = self.axis
 
-        def append_channel(images, *args):
+        def append_1d_channel(images, *args):
             images = np.expand_dims(images, axis=axis)
             return images
 
-        return append_channel
+        return append_1d_channel
 
     def declare_state_and_memory(self, previous_state: State) -> Tuple[State, Optional[AllocationQuery]]:
 
