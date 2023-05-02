@@ -22,11 +22,11 @@ class Add1dChannel(Operation):
         # get local variables to use in return function
         axis = self.axis
 
-        def append_1d_channel(images, *args):
+        def add_1d_channel(images, *args):
             images = np.expand_dims(images, axis=axis)
             return images
 
-        return append_1d_channel
+        return add_1d_channel
 
     def declare_state_and_memory(self, previous_state: State) -> Tuple[State, Optional[AllocationQuery]]:
 
