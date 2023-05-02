@@ -10,14 +10,13 @@ from ffcv.pipeline.state import State
 
 class EsaWorldCoverTransform(Operation):
 
-    def generate_code(self) -> Callable:
+    def generate_code(self, divisor_and_subtractor: Tuple[int, int] = (10, 1)) -> Callable:
         # get local variables to use in return function
-        divisor = 10
-        subtractor = 1
+        divisor = divisor_and_subtractor[0]
+        subtractor = divisor_and_subtractor[1]
 
         def esa_transform(images, *args):
-            # Select last two dimensions (width and height) and divide them before subtracting
-            return (images[..., 2:] / divisor) - subtractor
+            return (images / divisor) - subtractor
 
         return esa_transform
 
