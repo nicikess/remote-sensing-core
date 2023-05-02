@@ -22,11 +22,7 @@ class ChannelSelector(Operation):
         channels = np.array(self.channels, dtype=np.int64)
 
         def select_channels(images, *args):
-            print(images.shape)
-            if len(images.shape) > 3:
-                return images[:, channels, ::]
-            else:
-                return images[:, channels]
+            return images[:, channels, ::]
 
         return select_channels
 
@@ -34,7 +30,8 @@ class ChannelSelector(Operation):
         self, previous_state: State
     ) -> Tuple[State, Optional[AllocationQuery]]:
         # Get new shape
-        shape = (len(self.channels), *previous_state.shape[1:])
+        _, h, w = previous_state.shape
+        shape = (len(self.channels), h, w)
 
         # Update state shape
         new_state = replace(previous_state, shape=shape)
