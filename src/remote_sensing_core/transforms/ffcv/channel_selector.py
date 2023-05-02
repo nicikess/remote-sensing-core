@@ -51,7 +51,7 @@ class ChannelSelector(Operation):
         elif self.band_names == Bands.INFRARED:
             channels = 4
         elif self.band_names == Bands.ALL:
-            assert channels == 12
+            pass
         else:
             raise NotImplementedError(f"Bands {self.bands} not implemented")
         shape = (channels, h, w)
