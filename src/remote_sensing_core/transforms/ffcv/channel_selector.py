@@ -23,7 +23,6 @@ class ChannelSelector(Operation):
         bands = self.band_names
 
         def select_channels(images, *args):
-            print(np.shape(images))
             if bands == Bands.RGB:
                 rgb_channels = [3, 2, 1]
                 rgb_channels = np.array(rgb_channels, dtype=np.int64)
