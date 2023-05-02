@@ -116,7 +116,9 @@ class BenGe(Dataset):
         if self.output_as_tuple:
             mapping = []
             output_tensor_tuple = tuple()
-            for k, v in dict(sorted(output_tensor.items(), key=lambda x: x[0].lower())).items():
+            for k, v in dict(
+                sorted(output_tensor.items(), key=lambda x: x[0].lower())
+            ).items():
                 mapping.append(k)
                 output_tensor_tuple += (v,)
             output_tensor_tuple += (mapping,)
