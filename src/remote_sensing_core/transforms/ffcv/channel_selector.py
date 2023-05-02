@@ -16,7 +16,7 @@ from remote_sensing_core.constants import Bands
 class ChannelSelector(Operation):
 
     def __init__(self, s2_bands: Union[str, Bands]):
-        self.band_names = s2_bands
+        self.band_names = Bands(s2_bands)
 
     def generate_code(self) -> Callable:
         # get local variables to use in return function
