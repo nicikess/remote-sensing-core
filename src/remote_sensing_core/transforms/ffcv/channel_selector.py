@@ -31,9 +31,10 @@ class ChannelSelector(Operation):
                 infrared_channels = np.array(infrared_channels, dtype=np.int64)
                 images = images[:, infrared_channels, :, :]
             elif bands == Bands.ALL:
-                return images
+                pass
             else:
                 raise NotImplementedError(f"Bands {bands} not implemented")
+            return images
 
         return select_channels
 
