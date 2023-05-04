@@ -8,12 +8,14 @@ from ffcv.pipeline.state import State
 
 
 class EsaWorldCoverTransform(Operation):
-    def generate_code(
-        self, divisor_and_subtractor: Tuple[int, int] = (10, 1)
-    ) -> Callable:
+    def __init__(self, divisor: float, subtractor: float):
+        self.subtractor = subtractor
+        self.divisor = divisor
+
+    def generate_code(self) -> Callable:
         # get local variables to use in return function
-        divisor = divisor_and_subtractor[0]
-        subtractor = divisor_and_subtractor[1]
+        divisor = self.divisor
+        subtractor = self.subtractor
 
         def esa_transform(images, *args):
             return (images / divisor) - subtractor
