@@ -14,7 +14,6 @@ from remote_sensing_core.constants import Bands
 
 
 class Add1dChannel(Operation):
-
     def __init__(self, axis: int = 1):
         self.axis = axis
 
@@ -28,7 +27,9 @@ class Add1dChannel(Operation):
 
         return add_1d_channel
 
-    def declare_state_and_memory(self, previous_state: State) -> Tuple[State, Optional[AllocationQuery]]:
+    def declare_state_and_memory(
+        self, previous_state: State
+    ) -> Tuple[State, Optional[AllocationQuery]]:
 
         h, w = previous_state.shape
         new_shape = (1, h, w)
