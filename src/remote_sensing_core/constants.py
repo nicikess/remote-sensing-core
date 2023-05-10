@@ -20,3 +20,12 @@ ELEVATION_DIFFERENCE_LABEL_KEY = "elevation_difference_label"
 
 # File data type
 NUMPY_DTYPE = "float32"
+
+# Temperature sentinel 2 index
+TEMPERATURE_S2_INDEX = 3
+
+# Season S2 index
+SEASON_S2_INDEX = 0
+
+# Climate zone index
+CLIMATE_ZONE_INDEX = 1

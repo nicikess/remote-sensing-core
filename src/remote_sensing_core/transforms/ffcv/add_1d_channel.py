@@ -9,9 +9,6 @@ from ffcv.pipeline.operation import Operation
 from ffcv.pipeline.allocation_query import AllocationQuery
 from ffcv.pipeline.state import State
 
-# Bands
-from remote_sensing_core.constants import Bands
-
 
 class Add1dChannel(Operation):
     def __init__(self, axis: int = 1):
