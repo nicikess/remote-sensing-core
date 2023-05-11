@@ -23,11 +23,8 @@ class Era5TemperatureS2Transform(Operation):
         min_value = self.min_value
 
         def era5_transform(row, *args):
-            # access temperature s2 at index 3
-            temperature_s2 = row[TEMPERATURE_S2_INDEX]
-            normalized_temperature = (temperature_s2 - self.min_value) / (self.max_value - self.min_value)
-            grey_scaled_temperature = normalized_temperature * 255
-            return grey_scaled_temperature
+            normalized_temperature = (row - min_value) / (max_value - min_value)
+            return normalized_temperature
 
         return era5_transform
 

@@ -8,6 +8,8 @@ from ffcv.pipeline.state import State
 
 from remote_sensing_core.constants import CLIMATE_ZONE_INDEX
 
+import numpy as np
+
 class ClimateZonesTransform(Operation):
     def __init__(self):
         # values taken from ben-ge_era-5.csv from ben-ge-100
@@ -19,12 +21,9 @@ class ClimateZonesTransform(Operation):
         max_value = self.max_value
         min_value = self.min_value
 
-        def climate_zone_transform(row, *args):
-            # access temperature s2 at index 3
-            climate_zone = row[CLIMATE_ZONE_INDEX]
-            normalized_climate_zone = (climate_zone - min_value) / (max_value - min_value)
-            grey_scaled_climate_zone = normalized_climate_zone * 255
-            return grey_scaled_climate_zone
+        def climate_zone_transform(climate_zone_batch, *args):
+            climate_zone_batch_normalized = (climate_zone_batch - min_value) / (max_value - min_value)
+            return climate_zone_batch_normalized
 
         return climate_zone_transform
 
