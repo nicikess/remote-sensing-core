@@ -22,7 +22,10 @@ class ChannelSelector(Operation):
         channels = np.array(self.channels, dtype=np.int64)
 
         def select_channels(images, *args):
-            return images[:, channels, ::]
+            if len(images.shape) > 2:
+                return images[:, channels, ::]
+            else:
+                return images[:, channels]
 
         return select_channels
 
