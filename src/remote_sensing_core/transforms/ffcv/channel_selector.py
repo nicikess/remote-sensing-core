@@ -31,6 +31,7 @@ class ChannelSelector(Operation):
     ) -> Tuple[State, Optional[AllocationQuery]]:
         # Get new shape
         shape = (len(self.channels), *previous_state.shape[1:])
+        print("New shape", shape)
 
         # Update state shape
         new_state = replace(previous_state, shape=shape)
