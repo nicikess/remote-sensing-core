@@ -19,7 +19,7 @@ class Remove1dChannel(Operation):
         axis = self.axis
 
         def remove_1d_channel(images, *args):
-            images = images[:, 0, :, :]
+            images = images[:, 0]
             return images
 
         return remove_1d_channel
