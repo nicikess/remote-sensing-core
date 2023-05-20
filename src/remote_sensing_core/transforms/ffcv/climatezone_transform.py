@@ -11,7 +11,7 @@ from remote_sensing_core.constants import TEMPERATURE_S2_INDEX
 import numpy as np
 from dataclasses import replace
 
-class Era5TemperatureS2Transform(Operation):
+class ClimateZoneTransform(Operation):
     def __init__(self):
         # values taken from ben-ge_era-5.csv from ben-ge-100
         self.number_of_climate_zones = 30
