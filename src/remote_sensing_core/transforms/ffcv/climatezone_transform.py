@@ -1,6 +1,5 @@
 from typing import Callable, Tuple, Optional
 
-
 # FFCV
 from ffcv.pipeline.operation import Operation
 from ffcv.pipeline.allocation_query import AllocationQuery
@@ -11,24 +10,25 @@ from remote_sensing_core.constants import TEMPERATURE_S2_INDEX
 import numpy as np
 from dataclasses import replace
 
+
 class ClimateZoneTransform(Operation):
     def __init__(self):
-        # values taken from ben-ge_era-5.csv from ben-ge-100
         self.number_of_climate_zones = 30
 
     def generate_code(self) -> Callable:
-        # get local variables to use in return function
         number_of_climate_zones = self.number_of_climate_zones
 
-        def climate_zone_transform(batched_data, *args):
-            return np.eye(number_of_climate_zones)[batched_data.flatten()]
+        def climate_zone_transform(climate_zone, *args):
+            climate_zone = climate_zone.flatten()
+            climate_zone = climate_zone.astype('int64')
+            return np.eye(number_of_climate_zones)[climate_zone]
 
         return climate_zone_transform
 
     def declare_state_and_memory(
-        self, previous_state: State
+            self, previous_state: State
     ) -> Tuple[State, Optional[AllocationQuery]]:
-        new_shape = self.number_of_climate_zones
+        new_shape = (self.number_of_climate_zones,)
 
         # Update state shape
         new_state = replace(previous_state, shape=new_shape)
