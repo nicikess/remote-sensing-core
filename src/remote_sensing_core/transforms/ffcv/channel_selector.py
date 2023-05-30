@@ -20,6 +20,8 @@ class ChannelSelector(Operation):
     def generate_code(self) -> Callable:
         # get local variables to use in return function
         channels = np.array(self.channels, dtype=np.int64)
+        if len(channels) == 1:
+            channels = channels[0]
 
         def select_channels(images, *args):
             return images[:, channels, ::]
