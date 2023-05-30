@@ -9,24 +9,21 @@ from ffcv.pipeline.operation import Operation
 from ffcv.pipeline.allocation_query import AllocationQuery
 from ffcv.pipeline.state import State
 
-# Bands
-from remote_sensing_core.constants import Bands
-
 
 class ChannelSelector(Operation):
-    def __init__(self, channels: List[int]):
+    def __init__(self, channels: List[int], two_dims: bool = False):
+        self.two_dims = two_dims
         self.channels = channels
 
     def generate_code(self) -> Callable:
         # get local variables to use in return function
+        two_dims = self.two_dims
         channels = np.array(self.channels, dtype=np.int64)
         if len(channels) == 1:
             channels = channels[0]
 
         def select_channels(images, *args):
-            print("Images", images)
-            print("shape", images.shape)
-            return images[:, channels, ::]
+            return images[:, channels] if two_dims else images[:, channels, ::]
 
         return select_channels
 
