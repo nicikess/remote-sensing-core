@@ -24,6 +24,8 @@ class ChannelSelector(Operation):
             channels = channels[0]
 
         def select_channels(images, *args):
+            print("Images", images)
+            print("shape", images.shape)
             return images[:, channels, ::]
 
         return select_channels
