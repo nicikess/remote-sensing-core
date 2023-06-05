@@ -12,6 +12,7 @@ from ffcv.pipeline.state import State
 
 class ExpandDimension(Operation):
     def __init__(self, axis: int = 1):
+        assert axis > 0
         self.axis = axis
 
     def generate_code(self) -> Callable:
@@ -27,9 +28,9 @@ class ExpandDimension(Operation):
     def declare_state_and_memory(
         self, previous_state: State
     ) -> Tuple[State, Optional[AllocationQuery]]:
-
-        h, w = previous_state.shape
-        new_shape = (1, h, w)
+        new_shape = [*previous_state.shape]
+        axis_index = self.axis-1
+        new_shape = tuple([*new_shape[:axis_index], 1, *new_shape[axis_index:]])
 
         # Update state shape
         new_state = replace(previous_state, shape=new_shape)
