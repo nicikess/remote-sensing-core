@@ -19,8 +19,6 @@ class ChannelSelector(Operation):
         # get local variables to use in return function
         two_dims = self.two_dims
         channels = np.array(self.channels, dtype=np.int64)
-        if len(channels) == 1:
-            channels = channels[0]
 
         def select_channels(images, *args):
             return images[:, channels] if two_dims else images[:, channels, ::]
