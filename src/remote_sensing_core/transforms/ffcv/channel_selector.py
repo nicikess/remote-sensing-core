@@ -1,4 +1,4 @@
-from typing import Callable, Tuple, Optional, List
+from typing import Callable, List, Optional, Tuple, Union
 
 # Numpy
 import numpy as np
@@ -11,7 +11,7 @@ from ffcv.pipeline.state import State
 
 
 class ChannelSelector(Operation):
-    def __init__(self, channels: List[int], two_dims: bool = False):
+    def __init__(self, channels: Union[int, List[int]], two_dims: bool = False):
         self.two_dims = two_dims
         self.channels = channels
 
@@ -29,7 +29,8 @@ class ChannelSelector(Operation):
         self, previous_state: State
     ) -> Tuple[State, Optional[AllocationQuery]]:
         # Get new shape
-        shape = (len(self.channels), *previous_state.shape[1:])
+        new_channel_size = len(self.channels) if hasattr(self.channels, "__len__") else 1
+        shape = (new_channel_size, *previous_state.shape[1:])
 
         # Update state shape
         new_state = replace(previous_state, shape=shape)
