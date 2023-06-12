@@ -32,6 +32,7 @@ class ChannelWiseMinMaxScaler(Operation):
         )
         assert len(self.interval_min) == len(self.interval_max)
         assert len(self.interval_max) == len(minimum_value)
+        self.minimum_value, self.maximum_value, self.interval_min, self.interval_max = (np.array(x) for x in [self.minimum_value, self.maximum_value, self.interval_min, self.interval_max])
 
     def generate_code(self) -> Callable:
         parallel_range = Compiler.get_iterator()
@@ -44,7 +45,7 @@ class ChannelWiseMinMaxScaler(Operation):
         interval_maximum = self.interval_max
 
         def scale_images(images, *args):
-            results = np.ones_like(images)
+            results = np.zeros_like(images)
             for i in parallel_range(n_channels):
                 current_minimum = minimum[i]
                 current_maximum = maximum[i]
