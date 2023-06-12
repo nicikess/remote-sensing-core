@@ -44,7 +44,7 @@ class ChannelWiseMinMaxScaler(Operation):
         interval_maximum = self.interval_max
 
         def scale_images(images, *args):
-            results = []
+            results = tuple()
             for i in parallel_range(n_channels):
                 current_minimum = minimum[i]
                 current_maximum = maximum[i]
@@ -52,15 +52,17 @@ class ChannelWiseMinMaxScaler(Operation):
                 current_interval_maximum = interval_maximum[i]
 
                 current_channels = images[:, i] if two_dims else images[:, i, ::]
-                results.append(
+                results += (
                     (
-                        (current_channels - current_minimum)
-                        / (current_maximum - current_minimum)
-                    )
-                    * (current_interval_maximum - current_interval_minimum)
-                    + current_interval_minimum
+                        (
+                            (current_channels - current_minimum)
+                            / (current_maximum - current_minimum)
+                        )
+                        * (current_interval_maximum - current_interval_minimum)
+                        + current_interval_minimum
+                    ),
                 )
-            return np.stack(tuple(*results), axis=1,)
+            return np.stack(results, axis=1,)
 
         scale_images.is_parallel = True
         return scale_images
