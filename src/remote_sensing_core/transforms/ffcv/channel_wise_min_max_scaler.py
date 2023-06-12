@@ -34,7 +34,7 @@ class ChannelWiseMinMaxScaler(Operation):
         assert len(self.interval_max) == len(minimum_value)
 
     def generate_code(self) -> Callable:
-        parallel_range = Compiler.get_iterable()
+        parallel_range = Compiler.get_iterator()
         # get local variables to use in return function
         two_dims = self.two_dims
         n_channels = len(self.maximum_value)
