@@ -60,7 +60,7 @@ class ChannelWiseMinMaxScaler(Operation):
                     * (current_interval_maximum - current_interval_minimum)
                     + current_interval_minimum
                 )
-            return np.stack(results, axis=1,)
+            return np.stack(tuple(*results), axis=1,)
 
         scale_images.is_parallel = True
         return scale_images
