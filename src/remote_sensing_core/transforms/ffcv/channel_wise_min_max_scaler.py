@@ -53,14 +53,12 @@ class ChannelWiseMinMaxScaler(Operation):
 
                 current_channel = images[:, i] if two_dims else images[:, i, ::]
                 current_channel = (
-                    (
                         (
                             (current_channel - current_minimum)
                             / (current_maximum - current_minimum)
                         )
                         * (current_interval_maximum - current_interval_minimum)
                         + current_interval_minimum
-                    ),
                 )
                 if two_dims:
                     results[:, i] = current_channel
