@@ -29,7 +29,7 @@ class ExpandDimension(Operation):
         self, previous_state: State
     ) -> Tuple[State, Optional[AllocationQuery]]:
         new_shape = [*previous_state.shape]
-        axis_index = self.axis-1
+        axis_index = self.axis - 1
         new_shape = tuple([*new_shape[:axis_index], 1, *new_shape[axis_index:]])
 
         # Update state shape
