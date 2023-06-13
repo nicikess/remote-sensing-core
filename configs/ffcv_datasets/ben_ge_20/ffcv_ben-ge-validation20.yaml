@@ -69,7 +69,7 @@ numpy_dtype: &NP_DT
 ffcv_writer_config:
   module: ffcv.writer.DatasetWriter
   kwargs:
-    fname: /raid/remote_sensing/ben-ge/ffcv/ben-ge-20-validation-multi-class-ewc-label.beton
+    fname: /ds2/remote_sensing/ben-ge/ffcv/ben-ge-20-validation-multi-class-ewc-label.beton
     num_workers: 8
     fields: # Needs to be alphabetically ordered to fit tuple order of data set, except for field names which is always at the end
       climate_zone:
