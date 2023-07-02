@@ -20,13 +20,13 @@ class ClimateZoneTransform(Operation):
 
         def climate_zone_transform(climate_zone, *args):
             climate_zone = climate_zone.flatten()
-            climate_zone = climate_zone.astype('int64')
+            climate_zone = climate_zone.astype("int64")
             return np.eye(number_of_climate_zones)[climate_zone]
 
         return climate_zone_transform
 
     def declare_state_and_memory(
-            self, previous_state: State
+        self, previous_state: State
     ) -> Tuple[State, Optional[AllocationQuery]]:
         new_shape = (self.number_of_climate_zones,)
 
