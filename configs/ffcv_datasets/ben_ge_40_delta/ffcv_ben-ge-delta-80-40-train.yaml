@@ -23,7 +23,7 @@ esa_world_cover_modality: &EWC_MODALITY
   kwargs:
     data_root_path: /ds2/remote_sensing/ben-ge/ben-ge/esaworldcover/npy/
     numpy_dtype: "float32"
-    esa_world_cover_index_path: /netscratch2/nkesseli/master-thesis-benge/src/master_thesis_benge/scripts/data-splits/ben-ge-delta-80-train.csv
+    esa_world_cover_index_path: /netscratch2/nkesseli/master-thesis-benge/src/master_thesis_benge/scripts/data-splits/ben-ge-delta-80-40-train.csv
     multiclass_label_top_k: 11
 
 
